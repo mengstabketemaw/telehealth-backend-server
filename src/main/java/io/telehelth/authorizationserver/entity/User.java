@@ -36,8 +36,28 @@ public class User {
 
     String[] docRoles;
 
+    String latitude;
+
+    String longitude;
+
     @Lob
     byte[] specializationDocument;
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
 
     public long getId() {
         return id;

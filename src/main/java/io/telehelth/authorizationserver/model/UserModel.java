@@ -5,35 +5,58 @@ import io.telehelth.authorizationserver.entity.Roles;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 public class UserModel {
 
+    @NotNull
     String firstname;
+    @NotNull
     String middlename;
+    @NotNull
     String lastname;
-    MultipartFile specializationDocument;
-    MultipartFile avatar;
-    Roles Role;
-
+    @NotNull
+    Roles role;
+    @NotNull
     LocalDate birthDate;
-
-
-
-
+    @NotNull
     String sex;
+    @NotNull
     String phoneNumber;
+    @NotNull
     String homePhoneNumber;
+    @NotNull
     String password;
+    @NotNull
+    String longitude;
+    @NotNull
+    String latitude;
+
+    //this properties may be null considering who is registering
+    MultipartFile avatar;
+
+    MultipartFile specializationDocument;
+
     String martialStatus;
+
     String[] docRoles;
 
+    public String getLongitude() {
+        return longitude;
+    }
 
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
 
+    public String getLatitude() {
+        return latitude;
+    }
 
-
-
-
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
 
     public String getFirstname() {
         return firstname;
@@ -68,11 +91,11 @@ public class UserModel {
     }
 
     public Roles getRole() {
-        return Role;
+        return role;
     }
 
     public void setRole(Roles role) {
-        Role = role;
+        this.role = role;
     }
 
     public LocalDate getBirthDate() {
@@ -137,5 +160,8 @@ public class UserModel {
 
     public void setSpecializationDocument(MultipartFile specializationDocument) {
         this.specializationDocument = specializationDocument;
+    }
+    public String toString(){
+        return "["+firstname+"-"+middlename+"-"+lastname+"-"+sex+"-"+role.toString()+"]";
     }
 }

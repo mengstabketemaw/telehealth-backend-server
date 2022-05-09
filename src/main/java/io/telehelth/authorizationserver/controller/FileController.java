@@ -22,7 +22,7 @@ public class FileController {
     public ResponseEntity<byte[]> getAvatar(@PathVariable Long id){
         User user = userRepository.getById(id);
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION,"attachment; filename=\"avatar\"")
+                .header(HttpHeaders.CONTENT_DISPOSITION,"attachment; filename=\"avatar.png\"")
                 .body(user.getAvatar());
     }
 
