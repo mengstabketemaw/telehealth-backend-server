@@ -1,51 +1,39 @@
-package io.telehelth.authorizationserver.entity;
+package io.telehelth.authorizationserver.model;
 
-import javax.persistence.*;
+import io.telehelth.authorizationserver.entity.DocRoles;
+import io.telehelth.authorizationserver.entity.Roles;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.time.LocalDate;
 
-@Entity
-public class User {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    long id;
+public class UserModel {
 
     String firstname;
-
     String middlename;
-
     String lastname;
-
-    @Lob
-    byte[] avatar;
-
-    @Enumerated(EnumType.STRING)
+    MultipartFile specializationDocument;
+    MultipartFile avatar;
     Roles Role;
 
     LocalDate birthDate;
 
+
+
+
     String sex;
-
     String phoneNumber;
-
     String homePhoneNumber;
-
     String password;
-
     String martialStatus;
-
     String[] docRoles;
 
-    @Lob
-    byte[] specializationDocument;
 
-    public long getId() {
-        return id;
-    }
 
-    public void setId(long id) {
-        this.id = id;
-    }
+
+
+
+
 
     public String getFirstname() {
         return firstname;
@@ -71,11 +59,11 @@ public class User {
         this.lastname = lastname;
     }
 
-    public byte[] getAvatar() {
+    public MultipartFile getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(byte[] avatar) {
+    public void setAvatar(MultipartFile avatar) {
         this.avatar = avatar;
     }
 
@@ -143,11 +131,11 @@ public class User {
         this.docRoles = docRoles;
     }
 
-    public byte[] getSpecializationDocument() {
+    public MultipartFile getSpecializationDocument() {
         return specializationDocument;
     }
 
-    public void setSpecializationDocument(byte[] specializationDocument) {
+    public void setSpecializationDocument(MultipartFile specializationDocument) {
         this.specializationDocument = specializationDocument;
     }
 }
