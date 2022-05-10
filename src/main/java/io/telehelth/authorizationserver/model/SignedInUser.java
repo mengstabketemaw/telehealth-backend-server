@@ -9,5 +9,6 @@ public class SignedInUser {
     private String refreshToken;
     private String username;
     private String userId;
+    private String role;
 
 }

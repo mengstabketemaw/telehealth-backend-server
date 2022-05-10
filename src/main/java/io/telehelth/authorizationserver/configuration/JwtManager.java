@@ -25,7 +25,7 @@ public class JwtManager {
     public String create(UserDetails principal){
         final long now = System.currentTimeMillis();
         return JWT.create()
-                .withIssuer("AASTU Research Management Center of Excellence")
+                .withIssuer("telehealth-team")
                 .withSubject(principal.getUsername())
                 .withClaim("roles",principal.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .withIssuedAt(new Date(now))

@@ -27,6 +27,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
@@ -43,8 +44,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final Logger LOG = LoggerFactory.getLogger(getClass());
-    private UserDetailsService userService;
-    private PasswordEncoder bCryptPasswordEncoder;
+    private final UserDetailsService userService;
 
     @Value("${app.security.jwt.keystore-location}")
     private String keyStorePath;
@@ -55,10 +55,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${app.security.jwt.private-key-passphrase}")
     private String privateKeyPassphrase;
 
-    public WebSecurityConfig(UserDetailsService userService,
-                          PasswordEncoder bCryptPasswordEncoder) {
+    public WebSecurityConfig(UserDetailsService userService) {
         this.userService = userService;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @Override
@@ -73,7 +71,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, Constant.SIGNUP_URL).permitAll()
                 .antMatchers(HttpMethod.POST, Constant.TOKEN_URL).permitAll()
-                .antMatchers(HttpMethod.DELETE, Constant.TOKEN_URL).permitAll()
+                .antMatchers(HttpMethod.POST, Constant.SING_OUT).permitAll()
                 .antMatchers(HttpMethod.POST, Constant.REFRESH_URL).permitAll()
                 .antMatchers(HttpMethod.GET, Constant.PRODUCTS_URL).permitAll()
                 .antMatchers(HttpMethod.GET, Constant.DOWNLOAD_URL).permitAll()
@@ -99,13 +97,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userService).passwordEncoder(bCryptPasswordEncoder);
-    }
-
-    @Bean
-    @Override
-    protected UserDetailsService userDetailsService() {
-        return userService;
+        auth.userDetailsService(userService).passwordEncoder(passwordEncoder());
     }
 
     @Bean
@@ -168,5 +160,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public JwtDecoder jwtDecoder(RSAPublicKey rsaPublicKey) {
         return NimbusJwtDecoder.withPublicKey(rsaPublicKey).build();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
     }
 }

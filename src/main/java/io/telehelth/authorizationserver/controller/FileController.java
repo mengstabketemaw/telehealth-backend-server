@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/file")
+@RequestMapping("api/file")
 public class FileController {
 
     private final UserRepository userRepository;

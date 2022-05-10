@@ -52,7 +52,7 @@ public class AuthService {
         this.refreshTokenRepository = refreshTokenRepository;
     }
 
-    public void createUser(UserModel userModel) throws IOException {
+    public SignedInUser createUser(UserModel userModel) throws IOException {
 
         logger.info("creating ["+userModel.getRole().name()+"] account. received the following data");
         logger.info("UserModel ->"+userModel.toString());
@@ -93,7 +93,7 @@ public class AuthService {
             adminRepository.save(admin);
             logger.info("Doctor Account has been create");
         }
-
+        return createSignedUserWithRefreshToken(user);
     }
 
     private SignedInUser createSignedUserWithRefreshToken(User user) {
@@ -110,6 +110,7 @@ public class AuthService {
                 .build());
         SignedInUser signedInUser = new SignedInUser();
         signedInUser.setUserId(user.getId()+"");
+        signedInUser.setRole(user.getRole().name());
         signedInUser.setAccessToken(token);
         signedInUser.setUsername(user.getEmail());
         return signedInUser;
