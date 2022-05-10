@@ -6,18 +6,12 @@ import javax.persistence.*;
 
 @Entity
 @Data
-public class Doctor {
+public class Admin {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    long id;
-
+    private long id;
     @OneToOne(cascade = CascadeType.ALL)
-    User user;
-
-    String[] docRoles;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    FileDB specializationDocument;
+    private User user;
 
 }
