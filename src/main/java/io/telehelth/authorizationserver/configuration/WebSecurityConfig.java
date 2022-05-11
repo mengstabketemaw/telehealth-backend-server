@@ -80,6 +80,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/swagger-resources/**").permitAll()
                 .antMatchers("/api-docs**").permitAll()
                 .antMatchers("/webjars/**").permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .oauth2ResourceServer(oauth2ResourceServer -> oauth2ResourceServer.jwt(
                         jwt -> jwt.jwtAuthenticationConverter(getJwtAuthenticationConverter())))
