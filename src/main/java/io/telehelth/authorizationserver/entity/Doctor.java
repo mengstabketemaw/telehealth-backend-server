@@ -17,6 +17,8 @@ public class Doctor {
 
     String[] docRoles;
 
+    String specialization;
+
     @OneToOne(cascade = CascadeType.ALL)
     FileDB specializationDocument;
 
