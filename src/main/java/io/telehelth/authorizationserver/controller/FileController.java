@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -52,18 +53,10 @@ public class FileController {
     public ResponseEntity<Map<String,Object>> getUserInformationById(@PathVariable long id){
         //returning the user information vary according to the user so, first we should know what kind of user this is.
         User user = userRepository.findById(id).get();
-        ObjectMapper mapper = new ObjectMapper();
-        Map<String,Object> response = mapper.convertValue(user, new TypeReference<Map<String, Object>>() {
-            @Override
-            public Type getType() {
-                return super.getType();
-            }
-
-            @Override
-            public int compareTo(TypeReference<Map<String, Object>> o) {
-                return super.compareTo(o);
-            }
-        });
+        Map<String,Object> response = new HashMap<>();
+        response.put("name",user.getFirstname()+" "+user.getMiddlename()+" "+user.getLastname());
+        response.put("sex",user.getSex());
+        response.put("birthDate",user.getBirthDate());
 
         return null;
     }
