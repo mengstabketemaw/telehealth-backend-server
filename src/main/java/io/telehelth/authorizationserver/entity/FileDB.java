@@ -1,5 +1,6 @@
 package io.telehelth.authorizationserver.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,6 +19,7 @@ public class FileDB {
 
     private String type;
 
+    @JsonIgnore
     @Lob
     private byte[] data;
 

@@ -1,5 +1,6 @@
 package io.telehelth.authorizationserver.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.ToString;
 
@@ -16,6 +17,7 @@ public class User {
     String firstname;
     String middlename;
     String lastname;
+    @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL)
     FileDB avatar;
     @Enumerated(EnumType.STRING)
@@ -25,6 +27,7 @@ public class User {
     String phoneNumber;
     String homePhoneNumber;
     String email;
+    @JsonIgnore
     String password;
     String latitude;
     String longitude;

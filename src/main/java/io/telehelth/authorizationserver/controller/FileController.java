@@ -1,13 +1,10 @@
 package io.telehelth.authorizationserver.controller;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.telehelth.authorizationserver.entity.*;
 import io.telehelth.authorizationserver.model.UserModel;
 import io.telehelth.authorizationserver.repository.DoctorRepository;
 import io.telehelth.authorizationserver.repository.PatientRepository;
 import io.telehelth.authorizationserver.repository.UserRepository;
-import org.apache.coyote.Response;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -15,12 +12,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.print.Doc;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping("api/user")
@@ -83,23 +76,20 @@ public class FileController {
     }
 
     @PutMapping("/")
-    public ResponseEntity<User> updateUserInformation(@ModelAttribute @Valid UserModel user) throws IOException {
-        User oldUser = userRepository.findUserByEmail(user.getEmail()).get();
+    public ResponseEntity<User> updateUserInformation(@ModelAttribute @Valid UserModel user,Authentication authentication) throws IOException {
+        User oldUser = userRepository.findUserByEmail(authentication.getName()).get();
         BeanUtils.copyProperties(user,oldUser,"id","avatar","role","password");
         return ResponseEntity.ok(userRepository.save(oldUser));
     }
 
     @PutMapping("/avatar")
-    public ResponseEntity<Map<String,String>> updateAvatar(@RequestPart MultipartFile file, Authentication authentication){
-        Map<String,String> response = new HashMap<>();
-        response.put("name",authentication.getName());
-        return ResponseEntity.ok(response);
+    public ResponseEntity<Void> updateAvatar(@RequestPart MultipartFile file, Authentication authentication) throws IOException {
+        User user = userRepository.findUserByEmail(authentication.getName()).get();
+        var ava = user.getAvatar();
+        ava.setName(file.getName());
+        ava.setType(file.getContentType());
+        ava.setData(file.getBytes());
+        userRepository.save(user);
+        return ResponseEntity.ok().build();
     }
 }
-/*
-file
-1.doctor file returning based on the username or user id
-2.returning avatar of the user based on the username or the id
-3.updating user information.
-user info
-*/

@@ -16,7 +16,6 @@ public class UserModel {
     String middlename;
     @NotNull
     String lastname;
-    @NotNull
     Roles role;
     @NotNull
     LocalDate birthDate;
@@ -28,7 +27,6 @@ public class UserModel {
     String homePhoneNumber;
     @NotNull
     String email;
-    @NotNull
     String password;
     @NotNull
     String longitude;

@@ -63,7 +63,7 @@ public class AuthController {
     }
 
     @GetMapping("/test")
-    public ResponseEntity<String> test(@Valid @ModelAttribute Dummy date){
+    public ResponseEntity<String> test(){
         return ResponseEntity.ok("Worked");
     }
 
