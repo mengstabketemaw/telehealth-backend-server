@@ -71,6 +71,7 @@ public class AuthService {
 
         if(user.getRole().equals(Roles.DOCTOR)){
             Doctor doctor = new Doctor();
+            user.setDisabled(true);// doctors account must be enabled by admin before they are being used;
             doctor.setUser(user);
             doctor.setDocRoles(userModel.getDocRoles());
             FileDB doc = new FileDB();
@@ -90,6 +91,7 @@ public class AuthService {
             logger.info("Patient Account has been create -> "+patient.toString());
         }else{
             Admin admin = new Admin();
+            admin.setUser(user);
             adminRepository.save(admin);
             logger.info("Doctor Account has been create");
         }

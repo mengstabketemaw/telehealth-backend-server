@@ -10,7 +10,6 @@ import java.time.LocalDate;
 @Entity
 @Data
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     long id;
@@ -31,4 +30,5 @@ public class User {
     String password;
     String latitude;
     String longitude;
+    boolean disabled=true;
   }
