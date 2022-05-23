@@ -2,6 +2,7 @@ package io.telehelth.authorizationserver.controller;
 
 import io.telehelth.authorizationserver.entity.*;
 import io.telehelth.authorizationserver.model.UserModel;
+import io.telehelth.authorizationserver.repository.AdminRepository;
 import io.telehelth.authorizationserver.repository.DoctorRepository;
 import io.telehelth.authorizationserver.repository.PatientRepository;
 import io.telehelth.authorizationserver.repository.UserRepository;
@@ -9,6 +10,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,11 +24,15 @@ public class FileController {
     private final UserRepository userRepository;
     private final DoctorRepository doctorREpository;
     private final PatientRepository patientRepository;
+    private final AdminRepository adminRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public FileController(UserRepository userRepository, DoctorRepository doctorREpository, PatientRepository patientRepository) {
+    public FileController(UserRepository userRepository, DoctorRepository doctorREpository, PatientRepository patientRepository, AdminRepository adminRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.doctorREpository = doctorREpository;
         this.patientRepository = patientRepository;
+        this.adminRepository = adminRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping("/avatar/{username}")
@@ -58,9 +64,9 @@ public class FileController {
             Doctor doctor = doctorREpository.findByUser(user).get();
             return ResponseEntity.ok(doctor);
         }
-            return ResponseEntity.ok(user);
+            return ResponseEntity.ok(adminRepository.getById(id));
     }
-
+    //this method is deprecated by MENGSTABKETEMAW
     @GetMapping("/username/{email}")
     public ResponseEntity<Object> getUserInformationByEmail(@PathVariable String email){
         //returning the user information vary according to the user so, first we should know what kind of user this is.
@@ -79,6 +85,12 @@ public class FileController {
     public ResponseEntity<User> updateUserInformation(@RequestBody @Valid UserModel user,Authentication authentication) throws IOException {
         User oldUser = userRepository.findUserByEmail(authentication.getName()).get();
         BeanUtils.copyProperties(user,oldUser,"id","avatar","role","password");
+        //update the password if given and the password is more than 5 char
+        if(user.getPassword()!=null){
+            if(user.getPassword().length()>4){
+                oldUser.setPassword(passwordEncoder.encode(user.getPassword()));
+            }
+        }
         return ResponseEntity.ok(userRepository.save(oldUser));
     }
 
@@ -93,6 +105,3 @@ public class FileController {
         return ResponseEntity.ok().build();
     }
 }
-//TODO: Patients can't chage there role, you get the role key as custome, it differe based on the user
-//TODO: users can't chage password
-
