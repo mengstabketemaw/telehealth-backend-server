@@ -10,6 +10,7 @@ import io.telehelth.authorizationserver.service.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
@@ -45,7 +46,7 @@ public class AuthController {
     public ResponseEntity<SignedInUser> signIn(@RequestBody Map<String,String> body){
         String username = body.get("username");
         String password = body.get("password");
-        User user = userRepository.findUserByEmail(username).get();
+        User user = userRepository.findUserByEmail(username).orElseThrow(()->new UsernameNotFoundException("Username not Found: "+username));
         if (passwordEncoder.matches(password, user.getPassword())) {
             return ResponseEntity.ok(authService.getSignedInUser(user));
         }
