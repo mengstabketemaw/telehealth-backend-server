@@ -76,7 +76,7 @@ public class FileController {
     }
 
     @PutMapping("/")
-    public ResponseEntity<User> updateUserInformation(@ModelAttribute @Valid UserModel user,Authentication authentication) throws IOException {
+    public ResponseEntity<User> updateUserInformation(@RequestBody @Valid UserModel user,Authentication authentication) throws IOException {
         User oldUser = userRepository.findUserByEmail(authentication.getName()).get();
         BeanUtils.copyProperties(user,oldUser,"id","avatar","role","password");
         return ResponseEntity.ok(userRepository.save(oldUser));
@@ -93,3 +93,6 @@ public class FileController {
         return ResponseEntity.ok().build();
     }
 }
+//TODO: Patients can't chage there role, you get the role key as custome, it differe based on the user
+//TODO: users can't chage password
+

@@ -9,7 +9,7 @@ public class Constant {
     public static final String SING_OUT = "/api/oauth/signout";
     public static final String REFRESH_URL = "/api/auth/token/refresh";
     public static final String PRODUCTS_URL = "/api/oauth/calls";
-    public static final String DOWNLOAD_URL = "/api/file/**";
+    public static final String DOWNLOAD_URL = "/api/user/**";
     public static final String AUTHORIZATION =  "Authorization";
     public static final String TOKEN_PREFIX = "Bearer ";
     public static final String SECRET_KEY = "SECRET_KEY";
