@@ -1,5 +1,6 @@
 package io.telehelth.authorizationserver.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.telehelth.authorizationserver.entity.*;
 import io.telehelth.authorizationserver.model.UserModel;
 import io.telehelth.authorizationserver.repository.AdminRepository;
@@ -16,6 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/user")
@@ -64,7 +67,7 @@ public class FileController {
             Doctor doctor = doctorREpository.findByUser(user).get();
             return ResponseEntity.ok(doctor);
         }
-            return ResponseEntity.ok(adminRepository.getById(id));
+            return ResponseEntity.ok(adminRepository.findByUser(user).get());
     }
     //this method is deprecated by MENGSTABKETEMAW
     @GetMapping("/username/{email}")
