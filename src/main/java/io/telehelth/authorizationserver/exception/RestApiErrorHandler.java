@@ -4,6 +4,7 @@ package io.telehelth.authorizationserver.exception;
 import com.fasterxml.jackson.core.JsonParseException;
 import java.time.Instant;
 import java.util.Locale;
+import java.util.NoSuchElementException;
 import javax.servlet.http.HttpServletRequest;
 
 import io.telehelth.authorizationserver.configuration.Constant;
@@ -271,6 +272,7 @@ public class RestApiErrorHandler {
 
   @ExceptionHandler(GenericAlreadyExistsException.class)
   public ResponseEntity<Error> handleGenericAlreadyExistsException(HttpServletRequest request,
+
                                                                              GenericAlreadyExistsException ex, Locale locale) {
     Error error = ErrorUtils
         .createError(
@@ -282,4 +284,20 @@ public class RestApiErrorHandler {
         .setTimestamp(Instant.now());
     return new ResponseEntity<>(error, HttpStatus.NOT_ACCEPTABLE);
   }
+
+  @ExceptionHandler(NoSuchElementException.class)
+  public ResponseEntity<Error> handleNoSuchElementException(HttpServletRequest request,
+
+                                                                   NoSuchElementException ex, Locale locale) {
+    Error error = ErrorUtils
+            .createError(
+                    String
+                            .format("%s %s", "Telehealth: 404", ex.getMessage()),
+                    "404",
+                    HttpStatus.NOT_ACCEPTABLE.value()).setUrl(request.getRequestURL().toString())
+            .setReqMethod(request.getMethod())
+            .setTimestamp(Instant.now());
+    return new ResponseEntity<>(error, HttpStatus.NOT_ACCEPTABLE);
+  }
+
 }
