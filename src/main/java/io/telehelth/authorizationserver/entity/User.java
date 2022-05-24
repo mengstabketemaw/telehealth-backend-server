@@ -25,10 +25,11 @@ public class User {
     String sex;
     String phoneNumber;
     String homePhoneNumber;
+    @Column(nullable = false,unique = true)
     String email;
     @JsonIgnore
     String password;
     String latitude;
     String longitude;
-    boolean disabled=true;
+    boolean disabled;
   }
