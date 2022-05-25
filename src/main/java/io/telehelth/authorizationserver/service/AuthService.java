@@ -80,6 +80,7 @@ public class AuthService {
             doc.setType(userModel.getSpecializationDocument().getContentType());
             doc.setData(userModel.getSpecializationDocument().getBytes());
             doctor.setSpecializationDocument(doc);
+            doctor.setSpecialization(userModel.getSpecialization());
             doctorRepository.save(doctor);
             logger.info("Doctor Account has been create ->"+doctor.toString());
         }

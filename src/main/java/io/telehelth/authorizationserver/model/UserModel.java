@@ -40,6 +40,8 @@ public class UserModel {
 
     String martialStatus;
 
+    String specialization;
+
     String[] docRoles;
 
 }
