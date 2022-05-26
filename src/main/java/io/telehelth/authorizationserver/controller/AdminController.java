@@ -56,6 +56,7 @@ public class AdminController {
         var doc = doctor.getSpecializationDocument();
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_TYPE,doc.getType())
+                .header("file_name",doc.getName())
                 .header(HttpHeaders.CONTENT_DISPOSITION,"attachment; filename=\""+doc.getName()+"\"")
                 .body(doc.getData());
     }
