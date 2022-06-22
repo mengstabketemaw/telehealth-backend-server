@@ -6,14 +6,19 @@ import io.telehelth.authorizationserver.model.SignedInUser;
 import io.telehelth.authorizationserver.model.UserModel;
 import io.telehelth.authorizationserver.repository.*;
 import org.springframework.beans.BeanUtils;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
@@ -52,6 +57,7 @@ public class AuthService {
         this.refreshTokenRepository = refreshTokenRepository;
     }
 
+    @Transactional
     public SignedInUser createUser(UserModel userModel) throws IOException {
 
         logger.info("creating ["+userModel.getRole().name()+"] account. received the following data");
@@ -82,6 +88,25 @@ public class AuthService {
             doctor.setSpecializationDocument(doc);
             doctor.setSpecialization(userModel.getSpecialization());
             doctorRepository.save(doctor);
+
+            //registering doctor in scheduling server
+            var restTemplate = new RestTemplate();
+            var header = new HttpHeaders();
+            header.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<String> req = new HttpEntity<>("{\n" +
+                    "    \"id\": \""+user.getId()+"\",\n" +
+                    "    \"type\": \"Feature\",\n" +
+                    "    \"geometry\": {\n" +
+                    "        \"type\": \"Point\",\n" +
+                    "        \"coordinates\": [\n" +
+                    "            "+user.getLatitude()+",\n" +
+                    "            "+user.getLongitude()+"\n" +
+                    "        ]\n" +
+                    "    },\n" +
+                    "    \"properties\": {}\n" +
+                    "}",header);
+            restTemplate.postForEntity("https://micheletsigab.pythonanywhere.com/doctor/",req, String.class);
+
             logger.info("Doctor Account has been create ->"+doctor.toString());
         }
         else if (userModel.getRole().equals(Roles.PATIENT)){
